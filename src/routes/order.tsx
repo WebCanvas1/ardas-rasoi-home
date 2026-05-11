@@ -63,32 +63,40 @@ function OrderPage() {
 
   const ready = combo && selectedCurries.length === combo.curriesAllowed && name.trim() && phone.trim();
 
-  const buildMessage = () => {
-    if (!combo) return "";
+  const sendOrder = () => {
+    if (!ready || !combo) return;
+    const selectedCombination = {
+      name: combo.name,
+      price: combo.price,
+      rotiIncluded: combo.rotiIncluded,
+      rotiCount: combo.rotiCount,
+      riceIncluded: combo.riceIncluded,
+      raitaIncluded: combo.dahiRaitaIncluded,
+    };
+    const selectedDay = day;
     const curryNames = selectedCurries
       .map((id) => data.curries.find((c) => c.id === id)?.name)
-      .filter(Boolean)
-      .join(", ");
-    const lines = [
-      `*New Tiffin Order — Ardas Rasoi*`,
-      ``,
-      `👤 Name: ${name}`,
-      `📞 Phone: ${phone}`,
-      `📅 Day: ${day}`,
-      ``,
-      `🍱 Combination: ${combo.name}`,
-      `🥘 Curries: ${curryNames}`,
-      combo.rotiIncluded ? `🫓 Roti: ${combo.rotiCount}` : "",
-      combo.riceIncluded ? `🍚 Rice: Yes` : "",
-      combo.dahiRaitaIncluded ? `🥗 Dahi Raita: Yes` : "",
-      ``,
-      `💰 Price: $${combo.price}`,
-      note ? `📝 Note: ${note}` : "",
-    ].filter(Boolean);
-    return lines.join("\n");
-  };
+      .filter(Boolean) as string[];
 
-  const waLink = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${encodeURIComponent(buildMessage())}`;
+    const message = `
+Hello Ardas Rasoi,
+
+Name: ${name}
+Day: ${selectedDay}
+Combination: ${selectedCombination.name}
+Curries: ${curryNames.join(", ")}
+${selectedCombination.rotiIncluded ? `Rotis: ${selectedCombination.rotiCount}` : ""}
+${selectedCombination.riceIncluded ? "Rice Included" : ""}
+${selectedCombination.raitaIncluded ? "Dahi Raita Included" : ""}
+Price: $${selectedCombination.price}
+
+Note: ${note}
+`;
+
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/61466067692?text=${encodedMessage}`;
+    window.open(whatsappUrl, "_blank");
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -227,11 +235,10 @@ function OrderPage() {
                 <div className="text-xs uppercase tracking-widest text-muted-foreground">Order total</div>
                 <div className="font-display text-3xl font-bold text-primary">${combo?.price ?? 0}</div>
               </div>
-              <a
-                href={ready ? waLink : undefined}
-                target="_blank"
-                rel="noreferrer"
-                aria-disabled={!ready}
+              <button
+                type="button"
+                onClick={sendOrder}
+                disabled={!ready}
                 className={`inline-flex items-center gap-2 rounded-full px-7 py-4 text-sm font-semibold shadow-warm transition ${
                   ready
                     ? "bg-whatsapp text-whatsapp-foreground hover:-translate-y-0.5"
@@ -239,7 +246,7 @@ function OrderPage() {
                 }`}
               >
                 <WAIcon className="h-4 w-4" /> Send Order on WhatsApp
-              </a>
+              </button>
             </div>
             {!ready && combo && (
               <p className="mt-3 text-xs text-muted-foreground">
