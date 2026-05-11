@@ -235,11 +235,10 @@ Note: ${note}
                 <div className="text-xs uppercase tracking-widest text-muted-foreground">Order total</div>
                 <div className="font-display text-3xl font-bold text-primary">${combo?.price ?? 0}</div>
               </div>
-              <a
-                href={ready ? waLink : undefined}
-                target="_blank"
-                rel="noreferrer"
-                aria-disabled={!ready}
+              <button
+                type="button"
+                onClick={sendOrder}
+                disabled={!ready}
                 className={`inline-flex items-center gap-2 rounded-full px-7 py-4 text-sm font-semibold shadow-warm transition ${
                   ready
                     ? "bg-whatsapp text-whatsapp-foreground hover:-translate-y-0.5"
@@ -247,7 +246,7 @@ Note: ${note}
                 }`}
               >
                 <WAIcon className="h-4 w-4" /> Send Order on WhatsApp
-              </a>
+              </button>
             </div>
             {!ready && combo && (
               <p className="mt-3 text-xs text-muted-foreground">
