@@ -30,19 +30,12 @@ jobs:
         run: bun install
 
       - name: Build
-        run: |
-          bun run build
-          echo "ROOT FILES:"
-          ls
-          echo "DIST FILES:"
-          ls dist
-          echo "OUTPUT FILES:"
-          ls .output
+        run: bun run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: ./dist
+          path: ./dist/client
 
   deploy:
     runs-on: ubuntu-latest
