@@ -79,6 +79,7 @@ function OrderPage() {
   const search = Route.useSearch();
   const [week] = useWeekMenu();
   const [day, setDay] = useState<Day>(search.day ?? todayName());
+  const [orderDate, setOrderDate] = useState<Date>(() => dateForDayInWeek(search.day ?? todayName()));
   const [comboId, setComboId] = useState<string | null>(null);
   const [selectedCurries, setSelectedCurries] = useState<string[]>([]);
   const [name, setName] = useState("");
@@ -86,9 +87,17 @@ function OrderPage() {
   const [note, setNote] = useState("");
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [search.day]);
+
+  useEffect(() => {
     setComboId(null);
     setSelectedCurries([]);
+    setOrderDate(dateForDayInWeek(day));
   }, [day]);
+
+  const today = useMemo(() => { const d = new Date(); d.setHours(0,0,0,0); return d; }, []);
+  const weekEnd = useMemo(() => endOfWeek(), []);
 
   const data = week[day];
   const combo = useMemo(() => data?.combinations.find((c) => c.id === comboId) ?? null, [data, comboId]);
