@@ -245,7 +245,7 @@ Note: ${note}
 
           {/* Step 3: Curries */}
           {combo && (
-            <Step n={3} title={`Select ${combo.curriesAllowed} ${combo.curriesAllowed === 1 ? "curry" : "curries"}`}>
+            <Step n={4} title={`Select ${combo.curriesAllowed} ${combo.curriesAllowed === 1 ? "curry" : "curries"}`}>
               <div className="grid gap-2 sm:grid-cols-2">
                 {data.curries.map((c) => {
                   const active = selectedCurries.includes(c.id);
