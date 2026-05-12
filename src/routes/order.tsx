@@ -146,7 +146,7 @@ Note: ${note}
 `;
 
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/61466067692?text=${encodedMessage}`;
+    const whatsappUrl = `https://wa.me/61422931252?text=${encodedMessage}`;
     window.open(whatsappUrl, "_blank");
   };
 
