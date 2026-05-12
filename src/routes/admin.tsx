@@ -6,6 +6,7 @@ import {
   useWeekMenu,
   newId,
   defaultWeek,
+  saveWeekToApi,
   type Day,
   type Combination,
 } from "@/lib/menu-store";
@@ -85,11 +86,27 @@ function Login({ onSuccess }: { onSuccess: () => void }) {
 function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [week, setWeek] = useWeekMenu();
   const [day, setDay] = useState<Day>("Monday");
+  const [saving, setSaving] = useState(false);
+  const [saveMsg, setSaveMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const data = week[day];
 
   const update = (next: typeof data) => {
     setWeek({ ...week, [day]: next });
   };
+
+  const handleSave = async () => {
+    setSaving(true);
+    setSaveMsg(null);
+    const ok = await saveWeekToApi(week);
+    setSaving(false);
+    setSaveMsg(
+      ok
+        ? { type: "success", text: "Menu updated successfully" }
+        : { type: "error", text: "Failed to save menu. Changes kept locally." },
+    );
+    setTimeout(() => setSaveMsg(null), 4000);
+  };
+
 
   const addCurry = () => update({ ...data, curries: [...data.curries, { id: newId(), name: "New Curry" }] });
   const removeCurry = (id: string) => update({ ...data, curries: data.curries.filter((c) => c.id !== id) });
@@ -221,9 +238,36 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           ))}
         </div>
       </Section>
+
+      {/* Save Menu Changes */}
+      <div className="mt-8 rounded-3xl border border-saffron/30 bg-card p-6 shadow-warm">
+        <div className="flex flex-col items-center gap-3 text-center">
+          <h3 className="font-display text-xl font-bold text-primary">Publish Changes</h3>
+          <p className="text-sm text-muted-foreground">
+            Save the entire weekly menu to the cloud so all visitors see the latest version.
+          </p>
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="mt-2 inline-flex items-center justify-center rounded-full bg-saffron px-8 py-3 text-sm font-semibold text-saffron-foreground shadow-warm transition hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {saving ? "Saving..." : "Save Menu Changes"}
+          </button>
+          {saveMsg && (
+            <p
+              className={`text-sm font-medium ${
+                saveMsg.type === "success" ? "text-green-700" : "text-destructive"
+              }`}
+            >
+              {saveMsg.text}
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
+
 
 function Section({ title, action, children }: { title: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (

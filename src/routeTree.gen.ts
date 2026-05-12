@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as OrderRouteImport } from './routes/order'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiMenuRouteImport } from './routes/api/menu'
 
 const OrderRoute = OrderRouteImport.update({
   id: '/order',
@@ -28,35 +29,44 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiMenuRoute = ApiMenuRouteImport.update({
+  id: '/api/menu',
+  path: '/api/menu',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/order': typeof OrderRoute
+  '/api/menu': typeof ApiMenuRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/order': typeof OrderRoute
+  '/api/menu': typeof ApiMenuRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/order': typeof OrderRoute
+  '/api/menu': typeof ApiMenuRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/order'
+  fullPaths: '/' | '/admin' | '/order' | '/api/menu'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/order'
-  id: '__root__' | '/' | '/admin' | '/order'
+  to: '/' | '/admin' | '/order' | '/api/menu'
+  id: '__root__' | '/' | '/admin' | '/order' | '/api/menu'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   OrderRoute: typeof OrderRoute
+  ApiMenuRoute: typeof ApiMenuRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/menu': {
+      id: '/api/menu'
+      path: '/api/menu'
+      fullPath: '/api/menu'
+      preLoaderRoute: typeof ApiMenuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   OrderRoute: OrderRoute,
+  ApiMenuRoute: ApiMenuRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
