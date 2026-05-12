@@ -86,11 +86,27 @@ function Login({ onSuccess }: { onSuccess: () => void }) {
 function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [week, setWeek] = useWeekMenu();
   const [day, setDay] = useState<Day>("Monday");
+  const [saving, setSaving] = useState(false);
+  const [saveMsg, setSaveMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const data = week[day];
 
   const update = (next: typeof data) => {
     setWeek({ ...week, [day]: next });
   };
+
+  const handleSave = async () => {
+    setSaving(true);
+    setSaveMsg(null);
+    const ok = await saveWeekToApi(week);
+    setSaving(false);
+    setSaveMsg(
+      ok
+        ? { type: "success", text: "Menu updated successfully" }
+        : { type: "error", text: "Failed to save menu. Changes kept locally." },
+    );
+    setTimeout(() => setSaveMsg(null), 4000);
+  };
+
 
   const addCurry = () => update({ ...data, curries: [...data.curries, { id: newId(), name: "New Curry" }] });
   const removeCurry = (id: string) => update({ ...data, curries: data.curries.filter((c) => c.id !== id) });
