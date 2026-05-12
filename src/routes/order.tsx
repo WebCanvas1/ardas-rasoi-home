@@ -182,8 +182,43 @@ Note: ${note}
             </div>
           </Step>
 
-          {/* Step 2: Combination */}
-          <Step n={2} title="Choose a combination">
+          {/* Step 2: Date */}
+          <Step n={2} title="Pick your order date">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-full sm:w-auto justify-start text-left font-normal rounded-xl px-4 py-6 text-sm",
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {format(orderDate, "EEEE, d MMMM yyyy")}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={orderDate}
+                  onSelect={(d) => {
+                    if (!d) return;
+                    setOrderDate(d);
+                    setDay(dayNameFromDate(d));
+                  }}
+                  disabled={(d) => d < today || d > weekEnd}
+                  defaultMonth={orderDate}
+                  initialFocus
+                  className={cn("p-3 pointer-events-auto")}
+                />
+              </PopoverContent>
+            </Popover>
+            <p className="mt-2 text-xs text-muted-foreground">
+              You can order from today through the end of this week.
+            </p>
+          </Step>
+
+          {/* Step 3: Combination */}
+          <Step n={3} title="Choose a combination">
             <div className="grid gap-3 sm:grid-cols-2">
               {data.combinations.map((c) => (
                 <button
