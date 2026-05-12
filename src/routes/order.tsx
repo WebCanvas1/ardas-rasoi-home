@@ -20,16 +20,29 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+function scrollToTop() {
+  setTimeout(() => {
+    window.scrollTo(0, 0);
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }, 50);
+}
+
 // Returns date for a given day name within the current week (Mon-Sun).
 // If that day already passed this week, returns today instead.
 function dateForDayInWeek(day: Day): Date {
   const now = new Date();
   now.setHours(0, 0, 0, 0);
   const dayIndex: Record<Day, number> = {
-    Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6, Sunday: 0,
+    Monday: 1,
+    Tuesday: 2,
+    Wednesday: 3,
+    Thursday: 4,
+    Friday: 5,
+    Saturday: 6,
+    Sunday: 0,
   };
-  const today = now.getDay(); // 0=Sun
-  // Convert so Monday=0..Sunday=6
+  const today = now.getDay();
   const norm = (d: number) => (d === 0 ? 6 : d - 1);
   const target = norm(dayIndex[day]);
   const cur = norm(today);
@@ -43,7 +56,7 @@ function dateForDayInWeek(day: Day): Date {
 function endOfWeek(): Date {
   const now = new Date();
   now.setHours(0, 0, 0, 0);
-  const cur = now.getDay() === 0 ? 6 : now.getDay() - 1; // Mon=0..Sun=6
+  const cur = now.getDay() === 0 ? 6 : now.getDay() - 1;
   const d = new Date(now);
   d.setDate(now.getDate() + (6 - cur));
   d.setHours(23, 59, 59, 999);
@@ -51,7 +64,7 @@ function endOfWeek(): Date {
 }
 
 function dayNameFromDate(date: Date): Day {
-  const map: Day[] = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const map: Day[] = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   return map[date.getDay()];
 }
 
@@ -60,7 +73,9 @@ type Search = { day?: Day };
 export const Route = createFileRoute("/order")({
   component: OrderPage,
   validateSearch: (s: Record<string, unknown>): Search => ({
-    day: typeof s.day === "string" && (DAYS as readonly string[]).includes(s.day) ? (s.day as Day) : undefined,
+    day: typeof s.day === "string" && (DAYS as readonly string[]).includes(s.day)
+      ? (s.day as Day)
+      : undefined,
   }),
   head: () => ({
     meta: [{ title: "Build My Tiffin · Ardas Rasoi" }],
@@ -87,16 +102,22 @@ function OrderPage() {
   const [note, setNote] = useState("");
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollToTop();
   }, [search.day]);
 
   useEffect(() => {
     setComboId(null);
     setSelectedCurries([]);
     setOrderDate(dateForDayInWeek(day));
+    scrollToTop();
   }, [day]);
 
-  const today = useMemo(() => { const d = new Date(); d.setHours(0,0,0,0); return d; }, []);
+  const today = useMemo(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }, []);
+
   const weekEnd = useMemo(() => endOfWeek(), []);
 
   const data = week[day];
@@ -115,6 +136,7 @@ function OrderPage() {
 
   const sendOrder = () => {
     if (!ready || !combo) return;
+
     const selectedCombination = {
       name: combo.name,
       price: combo.price,
@@ -123,12 +145,14 @@ function OrderPage() {
       riceIncluded: combo.riceIncluded,
       raitaIncluded: combo.dahiRaitaIncluded,
     };
+
     const selectedDay = day;
     const curryNames = selectedCurries
       .map((id) => data.curries.find((c) => c.id === id)?.name)
       .filter(Boolean) as string[];
 
     const formattedDate = format(orderDate, "EEEE, d MMMM yyyy");
+
     const message = `
 Hello Ardas Rasoi,
 
@@ -163,13 +187,15 @@ Note: ${note}
             <p className="mt-3 text-muted-foreground">A few quick taps and we'll have it ready.</p>
           </div>
 
-          {/* Step 1: Day */}
           <Step n={1} title="Pick a day">
             <div className="grid grid-cols-3 gap-2 sm:grid-cols-7">
               {DAYS.map((d) => (
                 <button
                   key={d}
-                  onClick={() => setDay(d)}
+                  onClick={() => {
+                    setDay(d);
+                    scrollToTop();
+                  }}
                   className={`rounded-2xl border px-2 py-3 text-sm font-semibold transition ${
                     day === d
                       ? "border-saffron bg-saffron text-saffron-foreground shadow-soft"
@@ -182,15 +208,12 @@ Note: ${note}
             </div>
           </Step>
 
-          {/* Step 2: Date */}
           <Step n={2} title="Pick your order date">
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className={cn(
-                    "w-full sm:w-auto justify-start text-left font-normal rounded-xl px-4 py-6 text-sm",
-                  )}
+                  className={cn("w-full sm:w-auto justify-start text-left font-normal rounded-xl px-4 py-6 text-sm")}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {format(orderDate, "EEEE, d MMMM yyyy")}
@@ -204,6 +227,7 @@ Note: ${note}
                     if (!d) return;
                     setOrderDate(d);
                     setDay(dayNameFromDate(d));
+                    scrollToTop();
                   }}
                   disabled={(d) => d < today || d > weekEnd}
                   defaultMonth={orderDate}
@@ -217,13 +241,15 @@ Note: ${note}
             </p>
           </Step>
 
-          {/* Step 3: Combination */}
           <Step n={3} title="Choose a combination">
             <div className="grid gap-3 sm:grid-cols-2">
               {data.combinations.map((c) => (
                 <button
                   key={c.id}
-                  onClick={() => { setComboId(c.id); setSelectedCurries([]); }}
+                  onClick={() => {
+                    setComboId(c.id);
+                    setSelectedCurries([]);
+                  }}
                   className={`text-left rounded-2xl border p-4 transition ${
                     comboId === c.id
                       ? "border-saffron bg-saffron/10 shadow-soft"
@@ -243,7 +269,6 @@ Note: ${note}
             </div>
           </Step>
 
-          {/* Step 3: Curries */}
           {combo && (
             <Step n={4} title={`Select ${combo.curriesAllowed} ${combo.curriesAllowed === 1 ? "curry" : "curries"}`}>
               <div className="grid gap-2 sm:grid-cols-2">
@@ -260,7 +285,11 @@ Note: ${note}
                       }`}
                     >
                       <span className="font-medium text-foreground">{c.name}</span>
-                      <span className={`grid h-5 w-5 place-items-center rounded-full border ${active ? "bg-primary text-primary-foreground border-primary" : "border-border"}`}>
+                      <span
+                        className={`grid h-5 w-5 place-items-center rounded-full border ${
+                          active ? "bg-primary text-primary-foreground border-primary" : "border-border"
+                        }`}
+                      >
                         {active ? "✓" : ""}
                       </span>
                     </button>
@@ -273,7 +302,6 @@ Note: ${note}
             </Step>
           )}
 
-          {/* Step 4: Details */}
           {combo && (
             <Step n={5} title="Your details">
               <div className="grid gap-3 sm:grid-cols-2">
@@ -311,7 +339,6 @@ Note: ${note}
             </Step>
           )}
 
-          {/* Submit */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -362,7 +389,9 @@ function Step({ n, title, children }: { n: number; title: string; children: Reac
       className="mt-8 rounded-3xl border border-border bg-card/80 p-6 shadow-soft md:p-8"
     >
       <div className="mb-5 flex items-center gap-3">
-        <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-saffron font-bold text-saffron-foreground">{n}</span>
+        <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-saffron font-bold text-saffron-foreground">
+          {n}
+        </span>
         <h2 className="font-display text-xl font-bold text-primary">{title}</h2>
       </div>
       {children}
@@ -373,7 +402,9 @@ function Step({ n, title, children }: { n: number; title: string; children: Reac
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-muted-foreground">{label}</span>
+      <span className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+        {label}
+      </span>
       {children}
     </label>
   );
