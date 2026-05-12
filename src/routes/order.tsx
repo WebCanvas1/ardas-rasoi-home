@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import {
   DAYS,
   useWeekMenu,
@@ -13,6 +15,45 @@ import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { FloatingWhatsApp } from "@/components/site/FloatingWhatsApp";
 import { WAIcon } from "@/components/site/Hero";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+// Returns date for a given day name within the current week (Mon-Sun).
+// If that day already passed this week, returns today instead.
+function dateForDayInWeek(day: Day): Date {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const dayIndex: Record<Day, number> = {
+    Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6, Sunday: 0,
+  };
+  const today = now.getDay(); // 0=Sun
+  // Convert so Monday=0..Sunday=6
+  const norm = (d: number) => (d === 0 ? 6 : d - 1);
+  const target = norm(dayIndex[day]);
+  const cur = norm(today);
+  const diff = target - cur;
+  const d = new Date(now);
+  d.setDate(now.getDate() + diff);
+  if (d < now) return now;
+  return d;
+}
+
+function endOfWeek(): Date {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const cur = now.getDay() === 0 ? 6 : now.getDay() - 1; // Mon=0..Sun=6
+  const d = new Date(now);
+  d.setDate(now.getDate() + (6 - cur));
+  d.setHours(23, 59, 59, 999);
+  return d;
+}
+
+function dayNameFromDate(date: Date): Day {
+  const map: Day[] = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  return map[date.getDay()];
+}
 
 type Search = { day?: Day };
 
@@ -38,6 +79,7 @@ function OrderPage() {
   const search = Route.useSearch();
   const [week] = useWeekMenu();
   const [day, setDay] = useState<Day>(search.day ?? todayName());
+  const [orderDate, setOrderDate] = useState<Date>(() => dateForDayInWeek(search.day ?? todayName()));
   const [comboId, setComboId] = useState<string | null>(null);
   const [selectedCurries, setSelectedCurries] = useState<string[]>([]);
   const [name, setName] = useState("");
@@ -45,9 +87,17 @@ function OrderPage() {
   const [note, setNote] = useState("");
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [search.day]);
+
+  useEffect(() => {
     setComboId(null);
     setSelectedCurries([]);
+    setOrderDate(dateForDayInWeek(day));
   }, [day]);
+
+  const today = useMemo(() => { const d = new Date(); d.setHours(0,0,0,0); return d; }, []);
+  const weekEnd = useMemo(() => endOfWeek(), []);
 
   const data = week[day];
   const combo = useMemo(() => data?.combinations.find((c) => c.id === comboId) ?? null, [data, comboId]);
@@ -78,10 +128,12 @@ function OrderPage() {
       .map((id) => data.curries.find((c) => c.id === id)?.name)
       .filter(Boolean) as string[];
 
+    const formattedDate = format(orderDate, "EEEE, d MMMM yyyy");
     const message = `
 Hello Ardas Rasoi,
 
 Name: ${name}
+Order Date: ${formattedDate}
 Day: ${selectedDay}
 Combination: ${selectedCombination.name}
 Curries: ${curryNames.join(", ")}
@@ -130,8 +182,43 @@ Note: ${note}
             </div>
           </Step>
 
-          {/* Step 2: Combination */}
-          <Step n={2} title="Choose a combination">
+          {/* Step 2: Date */}
+          <Step n={2} title="Pick your order date">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-full sm:w-auto justify-start text-left font-normal rounded-xl px-4 py-6 text-sm",
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {format(orderDate, "EEEE, d MMMM yyyy")}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={orderDate}
+                  onSelect={(d) => {
+                    if (!d) return;
+                    setOrderDate(d);
+                    setDay(dayNameFromDate(d));
+                  }}
+                  disabled={(d) => d < today || d > weekEnd}
+                  defaultMonth={orderDate}
+                  initialFocus
+                  className={cn("p-3 pointer-events-auto")}
+                />
+              </PopoverContent>
+            </Popover>
+            <p className="mt-2 text-xs text-muted-foreground">
+              You can order from today through the end of this week.
+            </p>
+          </Step>
+
+          {/* Step 3: Combination */}
+          <Step n={3} title="Choose a combination">
             <div className="grid gap-3 sm:grid-cols-2">
               {data.combinations.map((c) => (
                 <button
@@ -158,7 +245,7 @@ Note: ${note}
 
           {/* Step 3: Curries */}
           {combo && (
-            <Step n={3} title={`Select ${combo.curriesAllowed} ${combo.curriesAllowed === 1 ? "curry" : "curries"}`}>
+            <Step n={4} title={`Select ${combo.curriesAllowed} ${combo.curriesAllowed === 1 ? "curry" : "curries"}`}>
               <div className="grid gap-2 sm:grid-cols-2">
                 {data.curries.map((c) => {
                   const active = selectedCurries.includes(c.id);
@@ -188,7 +275,7 @@ Note: ${note}
 
           {/* Step 4: Details */}
           {combo && (
-            <Step n={4} title="Your details">
+            <Step n={5} title="Your details">
               <div className="grid gap-3 sm:grid-cols-2">
                 <Field label="Name">
                   <input
