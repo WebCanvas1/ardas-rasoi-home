@@ -106,10 +106,44 @@ export const saveWeek = (w: WeekMenu) => {
   window.dispatchEvent(new Event("ardas-menu-updated"));
 };
 
+export const fetchWeekFromApi = async (): Promise<WeekMenu | null> => {
+  try {
+    const res = await fetch("/api/menu", { cache: "no-store" });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return (json?.menu as WeekMenu) ?? null;
+  } catch {
+    return null;
+  }
+};
+
+export const saveWeekToApi = async (w: WeekMenu): Promise<boolean> => {
+  try {
+    const res = await fetch("/api/menu", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(w),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+};
+
 export const useWeekMenu = () => {
   const [week, setWeek] = useState<WeekMenu>(() => defaultWeek());
   useEffect(() => {
+    // Local first for instant UI
     setWeek(loadWeek());
+    // Then refresh from API (KV) if available
+    fetchWeekFromApi().then((remote) => {
+      if (remote) {
+        setWeek(remote);
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(remote));
+        } catch {}
+      }
+    });
     const handler = () => setWeek(loadWeek());
     window.addEventListener("ardas-menu-updated", handler);
     window.addEventListener("storage", handler);
@@ -120,6 +154,7 @@ export const useWeekMenu = () => {
   }, []);
   return [week, (w: WeekMenu) => { setWeek(w); saveWeek(w); }] as const;
 };
+
 
 export const newId = uid;
 
