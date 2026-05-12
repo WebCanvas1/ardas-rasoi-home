@@ -128,10 +128,12 @@ function OrderPage() {
       .map((id) => data.curries.find((c) => c.id === id)?.name)
       .filter(Boolean) as string[];
 
+    const formattedDate = format(orderDate, "EEEE, d MMMM yyyy");
     const message = `
 Hello Ardas Rasoi,
 
 Name: ${name}
+Order Date: ${formattedDate}
 Day: ${selectedDay}
 Combination: ${selectedCombination.name}
 Curries: ${curryNames.join(", ")}
