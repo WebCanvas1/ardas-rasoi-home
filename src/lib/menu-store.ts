@@ -158,7 +158,7 @@ export const useWeekMenu = () => {
 
 export const newId = uid;
 
-export const WHATSAPP_NUMBER = "61422931252";
+export const WHATSAPP_NUMBER = "61466067692";
 
 export const todayName = (): Day => {
   const d = new Date().getDay();
