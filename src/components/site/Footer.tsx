@@ -10,7 +10,7 @@ export function Footer() {
           <div className="flex items-center gap-3">
             <img src={logo} alt="" className="h-12 w-12 rounded-full object-cover ring-2 ring-saffron/40" />
             <div>
-              <div className="font-display text-lg font-bold text-primary">Ardas Rasoi</div>
+              <div className="font-display text-lg font-bold text-primary">Authentic Home Food</div>
               <div className="font-script text-saffron">Fresh · Blessed · Home-Cooked</div>
             </div>
           </div>
@@ -38,7 +38,7 @@ export function Footer() {
         </div>
       </div>
       <div className="mx-auto mt-10 max-w-6xl border-t border-saffron/10 px-4 pt-6 text-center text-xs text-muted-foreground md:px-8">
-        © {new Date().getFullYear()} Ardas Rasoi. Made with ♥ in Schofields.
+        © {new Date().getFullYear()} Authentic Home Food. Made with ♥ in Schofields.
       </div>
     </footer>
   );
