@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Ardas Rasoi · Homemade Vegetarian Tiffin & Breakfast in Schofields" },
+      { title: "Authentic Home Food · Homemade Vegetarian Tiffin & Breakfast in Schofields" },
       { name: "description", content: "Fresh, blessed and home-cooked vegetarian tiffin and breakfast service in Schofields. Order daily curries, dal, roti and chai on WhatsApp." },
     ],
   }),
