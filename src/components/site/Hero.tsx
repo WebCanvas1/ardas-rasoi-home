@@ -6,7 +6,7 @@ import { WHATSAPP_NUMBER } from "@/lib/menu-store";
 
 export function Hero() {
   const waLink = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${encodeURIComponent(
-    "Hi Ardas Rasoi, I'd like to place a tiffin order."
+    "Hi Authentic Home Food, I'd like to place a tiffin order."
   )}`;
 
   return (
@@ -25,7 +25,7 @@ export function Hero() {
             </span>
           </div>
           <h1 className="font-display text-5xl font-bold leading-[1.05] text-balance text-primary md:text-7xl">
-            Ardas <span className="font-script text-saffron">Rasoi</span>
+            Authentic Home<span className="font-script text-saffron">Food</span>
           </h1>
           <p className="mt-4 font-script text-3xl text-brown md:text-4xl">
             Fresh · Blessed · Home-Cooked
