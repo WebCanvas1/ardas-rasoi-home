@@ -22,7 +22,7 @@ export function Navbar() {
         <Link to="/" className="flex items-center gap-2">
           <img src={logo} alt="Ardas Rasoi" className="h-11 w-11 rounded-full object-cover ring-2 ring-saffron/40" />
           <div className="leading-tight">
-            <div className="font-display text-lg font-semibold text-primary">Ardas Rasoi</div>
+            <div className="font-display text-lg font-semibold text-primary">Authentic Home Food</div>
             <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Homemade Tiffin</div>
           </div>
         </Link>
