@@ -68,7 +68,7 @@ export function Contact() {
             <div className="flex items-center gap-3 p-5">
               <img src={logo} alt="" className="h-12 w-12 rounded-full object-cover ring-2 ring-saffron/40" />
               <div>
-                <div className="font-display text-lg font-semibold text-primary">Ardas Rasoi</div>
+                <div className="font-display text-lg font-semibold text-primary">Authentic Home Food</div>
                 <div className="text-xs text-muted-foreground">Fresh · Blessed · Home-Cooked</div>
               </div>
             </div>
