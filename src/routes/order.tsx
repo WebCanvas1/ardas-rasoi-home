@@ -78,7 +78,7 @@ export const Route = createFileRoute("/order")({
       : undefined,
   }),
   head: () => ({
-    meta: [{ title: "Build My Tiffin · Ardas Rasoi" }],
+    meta: [{ title: "Build My Tiffin · House of Flavours" }],
   }),
 });
 
@@ -154,23 +154,26 @@ function OrderPage() {
     const formattedDate = format(orderDate, "EEEE, d MMMM yyyy");
 
     const message = `
-Hello Ardas Rasoi,
+Hi House of Flavours, I'd like to place a tiffin order.
 
 Name: ${name}
+Phone: ${phone}
 Order Date: ${formattedDate}
 Day: ${selectedDay}
 Combination: ${selectedCombination.name}
-Curries: ${curryNames.join(", ")}
+Items: ${curryNames.join(", ")}
 ${selectedCombination.rotiIncluded ? `Rotis: ${selectedCombination.rotiCount}` : ""}
 ${selectedCombination.riceIncluded ? "Rice Included" : ""}
 ${selectedCombination.raitaIncluded ? "Dahi Raita Included" : ""}
 Price: $${selectedCombination.price}
 
 Note: ${note}
+
+(Please confirm pickup or delivery. Orders must be placed at least 2 hours prior.)
 `;
 
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/61422931252?text=${encodedMessage}`;
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${encodedMessage}`;
     window.open(whatsappUrl, "_blank");
   };
 

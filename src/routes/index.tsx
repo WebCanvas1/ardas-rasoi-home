@@ -13,8 +13,8 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Authentic Home Food · Homemade Vegetarian Tiffin & Breakfast in Schofields" },
-      { name: "description", content: "Fresh, blessed and home-cooked vegetarian tiffin and breakfast service in Schofields. Order daily curries, dal, roti and chai on WhatsApp." },
+      { title: "House of Flavours · Pure Veg Tiffin Service in Marayong & Blacktown" },
+      { name: "description", content: "Fresh homemade pure vegetarian tiffin service in Marayong and Blacktown. Weekly menu, pickup near Marayong Train Station, and delivery within 5 km." },
     ],
   }),
 });

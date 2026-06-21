@@ -15,12 +15,12 @@ import { Footer } from "@/components/site/Footer";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
-  head: () => ({ meta: [{ title: "Admin · Ardas Rasoi" }] }),
+  head: () => ({ meta: [{ title: "Admin · House of Flavours" }] }),
 });
 
-const ADMIN_USER = "ardas@rasoi";
+const ADMIN_USER = "houseofflavours";
 const ADMIN_PASS = "Tiffin@2026";
-const AUTH_KEY = "ardas-admin-auth";
+const AUTH_KEY = "hof-admin-auth";
 
 function AdminPage() {
   const [auth, setAuth] = useState(false);
@@ -51,7 +51,7 @@ function Login({ onSuccess }: { onSuccess: () => void }) {
         className="rounded-3xl border border-saffron/20 bg-card p-8 shadow-warm"
       >
         <h1 className="font-display text-3xl font-bold text-primary">Admin Login</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Manage the weekly Ardas Rasoi menu.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Manage the weekly House of Flavours menu.</p>
         <form
           className="mt-6 space-y-4"
           onSubmit={(e) => {

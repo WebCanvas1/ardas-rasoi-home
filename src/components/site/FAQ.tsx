@@ -1,11 +1,11 @@
 import { useState } from "react";
 
 const faqs = [
-  { q: "How do I place an order?", a: "Pick your day and combo on our menu page, then send your order via WhatsApp. Easy!" },
-  { q: "How early should I order?", a: "Please text us at least 1 hour before pickup so we can prepare your tiffin fresh." },
-  { q: "Do you offer delivery?", a: "We're pickup-first, but local delivery can be arranged on request — just ask on WhatsApp." },
-  { q: "Are your meals 100% vegetarian?", a: "Absolutely. Pure veg, no eggs, prepared in a sattvic kitchen." },
-  { q: "Can I customise my tiffin?", a: "Each combo lets you pick from the day's curries — choose what you love." },
+  { q: "How do I place an order?", a: "Message us on WhatsApp with your selected day, meal, pickup/delivery preference, and quantity." },
+  { q: "How early should I order?", a: "Please place orders at least 2 hours before pickup or delivery." },
+  { q: "Do you deliver?", a: "Yes, delivery is available within a 5 km radius of Marayong." },
+  { q: "Where can I pick up?", a: "Pickup is available from Marayong or near Marayong Train Station. Exact address is shared after confirmation." },
+  { q: "Is the food vegetarian?", a: "Yes, all meals are pure vegetarian and freshly prepared." },
 ];
 
 export function FAQ() {

@@ -4,7 +4,7 @@ import { WAIcon } from "./Hero";
 export function FloatingWhatsApp() {
   return (
     <a
-      href={`https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${encodeURIComponent("Hi Ardas Rasoi!")}`}
+      href={`https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${encodeURIComponent("Hi House of Flavours, I'd like to place a tiffin order.")}`}
       target="_blank"
       rel="noreferrer"
       aria-label="Chat on WhatsApp"
