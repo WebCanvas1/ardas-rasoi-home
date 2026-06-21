@@ -1,13 +1,13 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "authentic-home-food",
+  "name": "tanstack-start-app",
   "compatibility_date": "2025-09-24",
   "compatibility_flags": ["nodejs_compat"],
   "main": "src/server.ts",
   "kv_namespaces": [
     {
       "binding": "ARDAS_MENU",
-      "id": "8a76a2b1312b4b6c92794ef9768fa195"
+      "id": "PASTE_YOUR_KV_NAMESPACE_ID_HERE"
     }
   ]
 }
