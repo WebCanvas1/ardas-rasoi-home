@@ -15,12 +15,12 @@ import { Footer } from "@/components/site/Footer";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
-  head: () => ({ meta: [{ title: "Admin · Ardas Rasoi" }] }),
+  head: () => ({ meta: [{ title: "Admin · House of Flavours" }] }),
 });
 
-const ADMIN_USER = "ardas@rasoi";
+const ADMIN_USER = "houseofflavours";
 const ADMIN_PASS = "Tiffin@2026";
-const AUTH_KEY = "ardas-admin-auth";
+const AUTH_KEY = "hof-admin-auth";
 
 function AdminPage() {
   const [auth, setAuth] = useState(false);
