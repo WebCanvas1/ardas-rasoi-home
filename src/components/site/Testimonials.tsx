@@ -1,7 +1,7 @@
 const reviews = [
-  { name: "Priya S.", text: "Tastes exactly like my mum's cooking back in Punjab. The dal is unreal.", role: "Schofields" },
-  { name: "Arjun K.", text: "Perfect lunch tiffin for work. Fresh, hot and ready when I pick up.", role: "Engineer" },
-  { name: "Neha M.", text: "Saves me so much time during the week and the kids love it.", role: "Mum of 2" },
+  { name: "Priya S.", text: "Tastes exactly like my mum's cooking back home. The dal is unreal.", role: "Marayong" },
+  { name: "Arjun K.", text: "Perfect lunch tiffin for work. Fresh, hot and ready when I pick up near the train station.", role: "Blacktown" },
+  { name: "Neha M.", text: "Saves me so much time during the week and the kids love every meal.", role: "Mum of 2" },
 ];
 
 export function Testimonials() {

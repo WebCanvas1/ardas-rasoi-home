@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 
 const items = [
-  { title: "Homemade Goodness", desc: "Every meal is cooked the way our mothers did — with patience, prayer and pure ingredients.", icon: "🏠" },
-  { title: "Fresh Daily", desc: "Curries, dal and rotis are prepared the morning of your tiffin. Nothing reheated, nothing stale.", icon: "🌿" },
-  { title: "Hygienic Kitchen", desc: "Spotless prep, sealed packing and quality oil. We treat your meal like family.", icon: "✨" },
-  { title: "Weekly Menu", desc: "A new combination every day so your week never feels repetitive.", icon: "📅" },
+  { title: "Pure Vegetarian", desc: "100% vegetarian kitchen — no eggs, no compromises. Just clean, sattvic home cooking.", icon: "🌿" },
+  { title: "Freshly Prepared Daily", desc: "Every curry, dal and roti is cooked the same day it's served. Nothing stored, nothing reheated.", icon: "🍲" },
+  { title: "Hygienic Home Style", desc: "Spotless prep, sealed packing and quality oil — we treat your meal like our family's.", icon: "✨" },
+  { title: "Weekly & Monthly Plans", desc: "Flexible tiffin plans for students, families and busy professionals. Order daily or subscribe.", icon: "📅" },
 ];
 
 export function About() {
@@ -17,7 +17,7 @@ export function About() {
             A Tiffin That Tastes Like <span className="font-script text-saffron">Home</span>
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-muted-foreground">
-            Ardas Rasoi serves freshly prepared vegetarian tiffin and breakfast for students, families and busy professionals across Schofields. Real recipes, real ingredients, real ghar ka swad.
+            House of Flavours serves freshly prepared pure-vegetarian tiffins for students, families and busy professionals across Marayong and Blacktown. Real recipes, real ingredients, real ghar ka swad.
           </p>
         </div>
 

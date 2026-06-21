@@ -6,7 +6,7 @@ import { WHATSAPP_NUMBER } from "@/lib/menu-store";
 
 export function Hero() {
   const waLink = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${encodeURIComponent(
-    "Hi Authentic Home Food, I'd like to place a tiffin order."
+    "Hi House of Flavours, I'd like to place a tiffin order."
   )}`;
 
   return (
@@ -19,19 +19,19 @@ export function Hero() {
           transition={{ duration: 0.7 }}
         >
           <div className="mb-6 flex items-center gap-3">
-            <img src={logo} alt="Ardas Rasoi logo" className="h-16 w-16 rounded-full object-cover shadow-warm ring-2 ring-saffron/50" />
+            <img src={logo} alt="House of Flavours logo" className="h-16 w-16 rounded-full object-cover shadow-warm ring-2 ring-saffron/50" />
             <span className="rounded-full border border-saffron/40 bg-saffron/10 px-3 py-1 text-xs font-medium uppercase tracking-widest text-brown">
-              Vegetarian Tiffin & Breakfast
+              Pure Veg Tiffin Service
             </span>
           </div>
           <h1 className="font-display text-5xl font-bold leading-[1.05] text-balance text-primary md:text-7xl">
-            Authentic Home<span className="font-script text-saffron">Food</span>
+            House of <span className="font-script text-saffron">Flavours</span>
           </h1>
           <p className="mt-4 font-script text-3xl text-brown md:text-4xl">
-            Fresh · Blessed · Home-Cooked
+            Homemade Taste · Fresh Food · Healthy Meals
           </p>
           <p className="mt-5 max-w-md text-lg text-muted-foreground">
-            Authentic North Indian tiffins prepared every morning with love, fresh ingredients and ghar ka swad — delivered to your day.
+            Freshly prepared every day with pure vegetarian ingredients, hygienic home-style cooking and weekly &amp; monthly tiffin plans across Marayong and Blacktown.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a
@@ -56,9 +56,9 @@ export function Hero() {
             </Link>
           </div>
           <div className="mt-8 flex flex-wrap gap-6 text-xs uppercase tracking-widest text-muted-foreground">
-            <span>🌿 100% Vegetarian</span>
-            <span>✦ Daily Fresh</span>
-            <span>♥ Made With Love</span>
+            <span>🌿 Pure Vegetarian</span>
+            <span>✦ Freshly Prepared Daily</span>
+            <span>♥ Hygienic Home Style</span>
           </div>
         </motion.div>
 
@@ -71,7 +71,7 @@ export function Hero() {
           <div className="absolute -inset-6 -z-10 rounded-full bg-gradient-saffron opacity-30 blur-3xl" />
           <img
             src={thali}
-            alt="Premium Indian thali with dal, paneer curry, rice, roti, dahi raita and chai"
+            alt="Pure vegetarian Indian thali with dal, sabzi, rice and roti"
             width={1600}
             height={1200}
             className="aspect-[4/3] w-full rounded-[2rem] object-cover shadow-warm ring-1 ring-saffron/30"
@@ -81,7 +81,7 @@ export function Hero() {
             transition={{ duration: 4, repeat: Infinity }}
             className="absolute -bottom-6 -left-4 hidden rounded-2xl bg-cream/95 p-4 shadow-warm md:block"
           >
-            <div className="text-xs uppercase tracking-widest text-saffron">Today's Special</div>
+            <div className="text-xs uppercase tracking-widest text-saffron">Weekly &amp; Monthly Plans</div>
             <div className="font-display text-lg font-bold text-primary">Tiffin from $15</div>
           </motion.div>
         </motion.div>

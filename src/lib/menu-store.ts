@@ -28,65 +28,112 @@ export const DAYS = [
 ] as const;
 export type Day = (typeof DAYS)[number];
 
-const STORAGE_KEY = "ardas-rasoi-menu-v1";
+// Bumped key so existing Ardas Rasoi caches don't override House of Flavours defaults.
+const STORAGE_KEY = "house-of-flavours-menu-v1";
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 
-const baseCurries = (): Curry[] => [
-  { id: uid(), name: "Baingan Bharta" },
-  { id: uid(), name: "Mix Dal" },
-  { id: uid(), name: "Aloo Jeera" },
-  { id: uid(), name: "Black Channe" },
-];
-
-const baseCombos = (): Combination[] => [
-  {
-    id: uid(),
-    name: "Any 2 Curries + 4 Roti",
-    price: 15,
-    curriesAllowed: 2,
-    rotiIncluded: true,
-    rotiCount: 4,
-    riceIncluded: false,
-    dahiRaitaIncluded: false,
-  },
-  {
-    id: uid(),
-    name: "1 Curry + Dahi Raita + 4 Roti",
-    price: 15,
-    curriesAllowed: 1,
-    rotiIncluded: true,
-    rotiCount: 4,
-    riceIncluded: false,
-    dahiRaitaIncluded: true,
-  },
-  {
-    id: uid(),
-    name: "1 Curry + Rice + Dahi Raita",
-    price: 15,
-    curriesAllowed: 1,
-    rotiIncluded: false,
-    rotiCount: 0,
-    riceIncluded: true,
-    dahiRaitaIncluded: true,
-  },
-  {
-    id: uid(),
-    name: "Any 2 Curries + Rice",
-    price: 15,
-    curriesAllowed: 2,
-    rotiIncluded: false,
-    rotiCount: 0,
-    riceIncluded: true,
-    dahiRaitaIncluded: false,
-  },
-];
+const emptyDay = (): DayMenu => ({ curries: [], combinations: [] });
 
 export const defaultWeek = (): WeekMenu => {
   const week = {} as WeekMenu;
-  for (const d of DAYS) {
-    week[d] = { curries: baseCurries(), combinations: baseCombos() };
-  }
+  for (const d of DAYS) week[d] = emptyDay();
+
+  // Wednesday — Dinner Only
+  week.Wednesday = {
+    curries: [{ id: uid(), name: "Chole Curry" }],
+    combinations: [
+      {
+        id: uid(),
+        name: "Chole + Rice + 4 Roti (Dinner)",
+        price: 15,
+        curriesAllowed: 1,
+        rotiIncluded: true,
+        rotiCount: 4,
+        riceIncluded: true,
+        dahiRaitaIncluded: false,
+      },
+    ],
+  };
+
+  // Thursday — Lunch & Dinner
+  week.Thursday = {
+    curries: [
+      { id: uid(), name: "Curd Tadka with Rice" },
+      { id: uid(), name: "Aloo Gobhi Subzy" },
+    ],
+    combinations: [
+      {
+        id: uid(),
+        name: "Curd Tadka Rice + Aloo Gobhi + 4 Roti",
+        price: 15,
+        curriesAllowed: 2,
+        rotiIncluded: true,
+        rotiCount: 4,
+        riceIncluded: false,
+        dahiRaitaIncluded: false,
+      },
+    ],
+  };
+
+  // Friday — Lunch & Dinner
+  week.Friday = {
+    curries: [{ id: uid(), name: "Rajma Curry" }],
+    combinations: [
+      {
+        id: uid(),
+        name: "Rajma + Rice + 4 Roti",
+        price: 15,
+        curriesAllowed: 1,
+        rotiIncluded: true,
+        rotiCount: 4,
+        riceIncluded: true,
+        dahiRaitaIncluded: false,
+      },
+    ],
+  };
+
+  // Saturday — Lunch & Dinner
+  week.Saturday = {
+    curries: [
+      { id: uid(), name: "Drum Sticks Subzy" },
+      { id: uid(), name: "Daal" },
+    ],
+    combinations: [
+      {
+        id: uid(),
+        name: "Drum Sticks + Daal + Rice + 4 Roti",
+        price: 15,
+        curriesAllowed: 2,
+        rotiIncluded: true,
+        rotiCount: 4,
+        riceIncluded: true,
+        dahiRaitaIncluded: false,
+      },
+    ],
+  };
+
+  // Sunday — Special
+  week.Sunday = {
+    curries: [
+      { id: uid(), name: "Dal Baati" },
+      { id: uid(), name: "Garlic Chutney" },
+    ],
+    combinations: [
+      {
+        id: uid(),
+        name: "Sunday Special · Dal Baati + Garlic Chutney + Rice",
+        price: 22,
+        curriesAllowed: 2,
+        rotiIncluded: false,
+        rotiCount: 0,
+        riceIncluded: true,
+        dahiRaitaIncluded: false,
+      },
+    ],
+  };
+
+  // Monday + Tuesday remain empty → shown as "Menu not available" on the site.
   return week;
 };
 
@@ -103,7 +150,7 @@ export const loadWeek = (): WeekMenu => {
 
 export const saveWeek = (w: WeekMenu) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(w));
-  window.dispatchEvent(new Event("ardas-menu-updated"));
+  window.dispatchEvent(new Event("hof-menu-updated"));
 };
 
 export const fetchWeekFromApi = async (): Promise<WeekMenu | null> => {
@@ -133,9 +180,7 @@ export const saveWeekToApi = async (w: WeekMenu): Promise<boolean> => {
 export const useWeekMenu = () => {
   const [week, setWeek] = useState<WeekMenu>(() => defaultWeek());
   useEffect(() => {
-    // Local first for instant UI
     setWeek(loadWeek());
-    // Then refresh from API (KV) if available
     fetchWeekFromApi().then((remote) => {
       if (remote) {
         setWeek(remote);
@@ -145,24 +190,26 @@ export const useWeekMenu = () => {
       }
     });
     const handler = () => setWeek(loadWeek());
-    window.addEventListener("ardas-menu-updated", handler);
+    window.addEventListener("hof-menu-updated", handler);
     window.addEventListener("storage", handler);
     return () => {
-      window.removeEventListener("ardas-menu-updated", handler);
+      window.removeEventListener("hof-menu-updated", handler);
       window.removeEventListener("storage", handler);
     };
   }, []);
   return [week, (w: WeekMenu) => { setWeek(w); saveWeek(w); }] as const;
 };
 
-
 export const newId = uid;
 
+// WhatsApp business number — keep as a variable so the client can update later.
 export const WHATSAPP_NUMBER = "61422931252";
+
+// Placeholder — replace with House of Flavours WhatsApp group/channel invite link.
+export const WHATSAPP_GROUP_LINK = "#";
 
 export const todayName = (): Day => {
   const d = new Date().getDay();
-  // 0=Sun
   const map: Day[] = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   return map[d];
 };

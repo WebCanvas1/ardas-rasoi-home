@@ -20,10 +20,10 @@ export function Navbar() {
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-8">
         <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="Ardas Rasoi" className="h-11 w-11 rounded-full object-cover ring-2 ring-saffron/40" />
+          <img src={logo} alt="House of Flavours" className="h-11 w-11 rounded-full object-cover ring-2 ring-saffron/40" />
           <div className="leading-tight">
-            <div className="font-display text-lg font-semibold text-primary">Authentic Home Food</div>
-            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Homemade Tiffin</div>
+            <div className="font-display text-lg font-semibold text-primary">House of Flavours</div>
+            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Pure Veg Tiffin</div>
           </div>
         </Link>
         <div className="hidden items-center gap-7 text-sm font-medium text-foreground/80 md:flex">
