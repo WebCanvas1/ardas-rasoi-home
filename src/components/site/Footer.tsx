@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import logo from "@/assets/ardas-logo.jpg";
+import logo from "@/assets/logo.png";
 import { WHATSAPP_NUMBER, WHATSAPP_GROUP_LINK } from "@/lib/menu-store";
 
 export function Footer() {
