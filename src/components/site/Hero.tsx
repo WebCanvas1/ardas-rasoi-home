@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import logo from "@/assets/ardas-logo.jpg";
+import logo from "@/assets/logo.png";
 import thali from "@/assets/hero-thali.jpg";
 import { WHATSAPP_NUMBER } from "@/lib/menu-store";
 
